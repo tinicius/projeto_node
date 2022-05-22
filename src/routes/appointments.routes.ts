@@ -1,35 +1,33 @@
-import { Router } from "express";
-import { startOfHour, parseISO } from "date-fns";
+import { Router } from 'express';
+import { parseISO } from 'date-fns';
 
-import AppointmentRepository from "../repositories/AppointmentsRepository";
+import { getCustomRepository } from 'typeorm';
+import AppointmentsRepository from '../repositories/AppointmentsRepository';
+import CreateAppointmentService from '../services/CreateAppointmentService';
 
-const router = Router();
-const appointmentRepository = new AppointmentRepository();
+import ensureAuthenticated from '../middlewares/ensureAuthenticated';
 
-router.get("/", (request, response) => {
-    const appointments = appointmentRepository.all();
-    return response.json(appointments);
+const appointmentsRouter = Router();
+appointmentsRouter.use(ensureAuthenticated);
+
+appointmentsRouter.get('/', async (request, response) => {
+  const appointmentsRepository = getCustomRepository(AppointmentsRepository);
+
+  const appointments = await appointmentsRepository.find();
+
+  return response.json(appointments);
 });
 
-router.post("/", (request, response) => {
-    const { provider, date } = request.body;
+appointmentsRouter.post('/', async (request, response) => {
+  const { provider_id, date } = request.body;
 
-    const parsedDate = startOfHour(parseISO(date));
+  const parsedDate = parseISO(date);
 
-    const findAppointmentsInSameDate = appointmentRepository.findByDate(parsedDate);
+  const createAppointment = new CreateAppointmentService();
 
-    if (findAppointmentsInSameDate) {
-        return response
-            .status(400)
-            .json({ message: "This appointment is already booked" });
-    }
+  const appointment = await createAppointment.execute({ provider_id, date: parsedDate });
 
-    const appointment = appointmentRepository.create({
-        provider,
-        date: parsedDate,
-    })
-
-    return response.json(appointment);
+  return response.json(appointment);
 });
 
-export default router;
+export default appointmentsRouter;

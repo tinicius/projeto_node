@@ -34,7 +34,7 @@
         "editor.formatOnSave": false
       },
       "typescript.updateImportsOnFileMove.enabled": "always",
-      "typescript.inlayHints.variableTypes.enabled": true,
+      "typescript.inlayHints.variableTypes.enabled": false,
       "typescript.inlayHints.enumMemberValues.enabled": true,
       "typescript.inlayHints.functionLikeReturnTypes.enabled": true,
       "typescript.inlayHints.parameterNames.enabled": "all",

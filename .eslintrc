@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": [
+    "@typescript-eslint",
+    "eslint-plugin-import"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "eslint-config-airbnb-base"
+  ],
+  "rules": {
+    "import/extensions": 0,
+    "import/no-unresolved": 0,
+    "class-methods-use-this": "off",
+    "camelcase":"off",
+    "no-unused-vars": ["error", {"argsIgnorePattern": "_"}],
+    "@typescript-eslint/no-unused-vars": ["error", {"argsIgnorePattern": "_"}]
+  }
+}
